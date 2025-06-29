@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+
 
 #یو آر ال های مربوط به اپ accounts در اینحا تعریف می شوند.
 app_name = "accounts"

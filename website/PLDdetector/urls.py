@@ -1,5 +1,7 @@
 from django.contrib.auth.urls import path
 from . import views
+from django.conf import settings
+
 
 #برای نمیش توضیحات گیاهان، باید ابتدا id آن گیاه از طرف لینک ارجاع دهنده ارسال شود.
 app_name = 'PLDdetector'

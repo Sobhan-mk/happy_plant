@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: django-app
+    env: python
+    plan: free
+    region: oregon  # or frankfurt, etc.
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn website.wsgi"
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        value: __04(b9&i)vq@72iza7!#(9gesqo-8ctmt*r%llr#^ysyj*z6v
+      - key: DEBUG
+        value: 'False'
+    staticPublishPaths:
+      - source: /mnt/media
+        path: /media
+      - source: staticfiles
+        path: /static
+    disk:
+      - name: media-disk
+        mountPath: /mnt/media
+        sizeGB: 1

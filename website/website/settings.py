@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'happy plant.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'happy-plant.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [

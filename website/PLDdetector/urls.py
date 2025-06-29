@@ -9,3 +9,6 @@ urlpatterns = [
     path('plant_diseased_detail/<int:id>', views.plant_diseased_detail, name='plant_diseased_detail'),
     path('about_model/', views.about_model, name='about_model')
 ]
+
+if settings.DEBUG is False:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -9,3 +9,6 @@ urlpatterns = [
     path('delete_all/', views.delete_all, name='delete_all_approachs'),
     path('edit_approach/<int:id>', views.edit_approach, name='edit_approach')
 ]
+
+if settings.DEBUG is False:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

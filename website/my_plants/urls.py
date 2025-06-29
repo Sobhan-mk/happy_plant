@@ -12,4 +12,5 @@ urlpatterns = [
     path('plant_remover/<int:plant_id>/', views.user_plant_remover, name='user_plant_remover'),
     path('plant_remover_all/', views.user_plant_remover_all, name='user_plant_remover_all'),
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG is False:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

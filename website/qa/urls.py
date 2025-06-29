@@ -19,3 +19,6 @@ urlpatterns = [
     path('delete/<int:id>', delete, name='delete_question'),
     path('delete-all/', delete_all, name='delete_all_questions')
 ]
+
+if settings.DEBUG is False:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

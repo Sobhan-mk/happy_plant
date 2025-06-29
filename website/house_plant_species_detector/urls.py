@@ -9,3 +9,6 @@ urlpatterns = [
     path('about_model/', about_model, name='about_model'),
 ]
 
+
+if settings.DEBUG is False:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

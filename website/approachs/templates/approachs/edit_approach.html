@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    edit approach
+{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        margin: 0;
+        padding: 10px;
+    }
+
+    .main-title {
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 50vh;
+        padding: 0;
+    }
+
+    .feedback-form {
+        padding: 10px;
+        margin: 0;
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .label {
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .submit-button {
+        background-color: #20bd28;
+        border-radius: 10px;
+        height: 30px;
+        width: 355px;
+        color: white;
+        border: 1px #20bd28 solid;
+        transition: 0.2s;
+        margin-top: 20px;
+    }
+
+    .submit-button:hover {
+        background-color: #66da6b;
+    }
+
+    /* Make the description field larger */
+    .feedback-form textarea {
+        width: 100%;
+        height: 150px;  /* Increase height */
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    /* Responsive styles */
+    @media (min-width: 768px) {
+        .feedback-form {
+            width: 100%;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .feedback-form {
+            width: 100%;
+        }
+    }
+</style>
+
+<h1 class="main-title">ویرایش انتقاد شما</h1>
+<div class="container">
+    <form method="post" class="feedback-form">
+        {% csrf_token %}
+        <p class="label">سرتیتر پیشنهاد شما</p>
+        {{ form.title }}
+        <p class="label">جزئیات</p>
+        {{ form.detail }}
+        <button type="submit" class="submit-button">ثبت تغییرات</button>
+    </form>
+</div>
+    <br>
+{% endblock %}

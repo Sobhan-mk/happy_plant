@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block title %}لیست نام گیاهان خانگی{% endblock %}
+{% block body %}
+    <style>
+        .main-title {
+            color: rgba(255, 255, 255, 0.99);
+            text-align: center;
+        }
+
+        .search-container {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            margin:20px
+        }
+
+        .search-container form {
+            display: inline-block;
+            width: 50%;
+        }
+
+        .page-container {
+            display: flex;
+            width: 100%;
+            direction: rtl;
+        }
+
+        .filter-container {
+            flex: 0 0 300px;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            height: 414px;
+        }
+
+        .filter-form {
+            border: 1px solid #595959;
+            padding: 20px;
+            border-radius: 20px;
+            height: auto;
+            background-color: #262a33;
+        }
+
+        .form-label {
+            color: white;
+        }
+
+        .results-container {
+            margin-right: 10px;
+            margin-left: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .custom-button {
+            display: flex;
+            border-radius: 10px;
+            height: 40px;
+            width: 200px;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: auto;
+            background-color: rgba(19, 192, 85, 0.99);
+            border: 1px #595959 solid;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .custom-button:hover {
+            background-color: #5ae194;
+        }
+
+        .results-center {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 5px;
+            width: 1000px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;         /* Stack items vertically */
+            justify-content: center;        /* Vertical centering */
+            align-items: center;            /* Horizontal centering */
+
+            border-radius: 20px;
+            border: 1px #595959 solid;
+            height: 400px;
+            width: 300px;
+            padding: 0;
+            margin-bottom: 20px;
+            background-color: #262a33;
+        }
+
+
+        .container img {
+            width: 100%;
+            padding: 10px;
+            border-radius: 20px;
+        }
+
+        .container div p {
+            font-size: 20px;
+            color: lightgray;
+        }
+
+        .container div p:last-child {
+            font-size: 15px;
+        }
+
+        .container a {
+            margin-right: 25px;
+            margin-left: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #13C055FC;
+            border-radius: 10px;
+            width: 250px;
+            height: 30px;
+            color: white;
+        }
+
+        @media screen and (max-width: 768px) {
+            .search-container form {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .page-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filter-container {
+                width: 90%;
+                max-width: 400px;
+                margin-bottom: 20px;
+            }
+
+            .results-center {
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .container {
+                width: 90%;
+                max-width: 400px;
+                flex-direction: column;
+            }
+
+            .custom-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+
+    <h1 class="main-title">فهرست نام گیاهان خانگی</h1>
+
+    <div class="search-container">
+        <form method="post" id="">
+            {% csrf_token %}
+            {{ search_form.query }}
+            <br><br>
+            <button type="submit" name="search" class="custom-button">جستوجو</button>
+        </form>
+    </div><br>
+    <div class="page-container">
+        <div class="filter-container">
+            <form method="post" action="{% url 'my_plants:house_plants_names' %}" class="filter-form">
+                {% csrf_token %}
+                <strong class="form-label">نور</strong><br>
+                {{ filter_form.light }}<br><br>
+                <strong class="form-label">آب</strong><br>
+                {{ filter_form.water }}<br><br>
+                <strong class="form-label">دما</strong><br>
+                {{ filter_form.temperature }}<br><br>
+                <strong class="form-label">نوع خاک</strong><br>
+                {{ filter_form.soil_type }}<br><br>
+                <button type="submit" class="custom-button" name="filter">فیلتر</button>
+            </form>
+        </div>
+        <div class="results-container">
+            <div class="results-center">
+                {% for plant in plant_names %}
+                    <div class="container">
+                        <img src="{{ plant.plant_image.url }}">
+                        <div>
+                            <p>نام عامیانه : {{ plant.name }}</p>
+                            <p style="font-size: 15px">نام علمی : {{ plant.scientific_name }}</p>
+                            <p style="font-size: 15px">نام فارسی : {{ plant.persian_name }}</p>
+                        </div>
+                        <div style="display: flex; padding: 10px; width: 320px">
+                            <a href="{% url 'my_plants:plant_detail' plant.id %}">اطلاعات بیشتر</a>
+                            {% if not plant in user_plants %}
+                                <a href="{% url 'my_plants:user_plant_adder' plant.id %}" style="background: #2793d0; height: 30px; width: 40px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-plus" viewBox="0 0 16 16">
+                                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                                    </svg>
+                                </a>
+                            {% else %}
+                                <a style="background-color: #ef1313; width: 40px" href="{% url 'my_plants:user_plant_remover' plant.id %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-x" viewBox="0 0 16 16">
+                                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                                    </svg>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

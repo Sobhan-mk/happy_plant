@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+
+</head>
+<body style="background:  #14191e">
+    {% include 'messages.html' %}
+    {% include 'navbar.html' %}
+    {% block body %}{% endblock %}
+<footer class="footer-tab" style="margin: 0 auto">
+    <footer>
+        <div class="footer-container">
+            <p style="color: gray">&copy; گیاه شاد</p>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'home:home' %}" style="color: gray">خانه</a></li>
+                    <li><a href="{% url 'my_plants:house_plants_names' %}" style="color: gray">فهرست گیاهان خانگی</a></li>
+                    <li><a href="{% url 'PLDdetector:plant_diseases_list' %}" style="color: gray">فهرست گیاهان آسیب دیده</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</footer>
+<style>
+    .footer {
+        margin-right: 20px;
+        color: gray;
+    }
+</style>
+</body>
+</html>

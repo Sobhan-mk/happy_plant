@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}
+    plant diseases list
+{% endblock %}
+
+{% block body %}
+    <style>
+        .title {
+            color: white;
+        }
+        .plant-cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .plant-card {
+            background: linear-gradient(to bottom, #292f31, rgb(154, 45, 45));
+            border-radius: 20px;
+            border: 1px #5d5d5d solid;
+            width: 250px;
+            margin: 10px;
+            padding-bottom: 20px;
+            display: list-item;
+            justify-content: center;
+        }
+        .plant-link {
+            color: lightgray;
+            background-color: #1b75b4;
+            height: 30px;
+            width: 200px;
+            border-radius: 10px;
+            display: inline-block;
+            text-align: center;
+            line-height: 30px;
+        }
+        .plant-image {
+            width: 250px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .flex-container {
+            justify-content: flex-end;
+            display: flex;
+        }
+
+        form {
+            margin: 0 122px;
+        }
+
+        @media (max-width: 768px) {
+            form {
+                margin: 0 50px;
+            }
+        }
+    </style>
+
+    <div style="display: flex; justify-content: center"><br>
+
+        <h1 class="title">فهرست گیاهان آسیب دیده</h1>
+    </div><br><br>
+    <div style="display: flex; justify-content: center"></div>
+        <form method="post" class="form">
+            {% csrf_token %}
+            {{ form.query }}<br><br>
+            <div style="display: flex; justify-content: center">
+            <button type="submit" name="search" style="background-color: #2bbd3e; height: 30px; width: 300px; border-radius: 10px; border: 1px #2bbd3e solid; color: white">جستوجو</button>
+                </div>
+        </form><br>
+    </div>
+    <div class="plant-cards-container">
+    {% for plant in plant_diseases %}
+            <div class="plant-card">
+                <div class="flex-container">
+                    <img src="{{ plant.image.url }}" class="plant-image">
+                </div><br>
+                <div >
+                <p style="color: lightgray; font-size: 20px">نام عامیانه: {{ plant.common_name }}</p>
+                <p style="color: lightgray; font-size: 17px">نام فارسی : {{ plant.persian_name }}</p>
+                <p style="color: lightgray; font-size: 17px">نام علمی: {{ plant.scientific_name }}</p>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 10px">
+                <a href="{% url 'PLDdetector:plant_diseased_detail' plant.id %}" class="plant-link">دیدن توضیحات</a>
+                </div>
+            </div>
+    {% endfor %}
+    </div>
+{% endblock %}

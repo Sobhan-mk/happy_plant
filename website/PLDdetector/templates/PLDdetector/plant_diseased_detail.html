@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block body %}
+    <style>
+    .page-container {
+        margin: 0 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .plant-card-border {
+        border-radius: 50px;
+        border: 1px white solid;
+        width: 500px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+    .plant-card {
+        background-color: #282e2f;
+        border-radius: 40px;
+        width: 100%;
+        box-shadow: 0 0 70px rgba(213, 144, 41, 0.64),
+            0 0 100px rgba(180, 82, 29, 0.71),
+            0 0 200px rgba(210, 14, 14, 0.4);
+        height: 100%;
+    }
+
+    .plant-image {
+        width: 459px;
+        border-top-left-radius: 40px;
+        border-top-right-radius: 40px;
+    }
+
+    .main-tag {
+        color: lightgray;
+        font-size: 20px;
+    }
+    .info {
+        padding: 10px;
+    }
+    .other-card-info {
+        font-size: 17px;
+        color: white;
+    }
+
+    .contents {
+        background-color: #292e2f;
+        border: 1px #565656 solid;
+        border-radius: 30px;
+        padding: 20px;
+        width: calc(100% - 40px); /* Ensures 20px space from edges */
+        margin: 20px 0;
+    }
+
+    p {
+        color: lightgray;
+    }
+
+    h3 {
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    @media screen and (max-width: 768px) {
+        .plant-card-border, .contents {
+            width: calc(100% - 40px); /* Ensures 20px space from edges */
+        }
+
+        .plant-image {
+            width: 100%;
+        }
+
+        .plant-card {
+            width: 100%;
+        }
+
+        .page-container {
+            margin: 0 0;
+        }
+    }
+    </style>
+    <br><br><br><br>
+    <div class="page-container">
+    <div class="plant-card-border">
+        <div class="plant-card">
+            <img src="{{ plant.image.url }}" class="plant-image">
+
+            <div class="info">
+                <p class="main-tag">نام عمومی: {{ plant.common_name }}</p>
+                <p class="other-card-info">نام فارسی: {{ plant.persian_name }}</p>
+                <p class="other-card-info">نام علمی: {{ plant.scientific_name }}</p>
+            </div>
+        </div>
+    </div>
+    <h3>علائم</h3>
+    <div class="contents">
+    <p>{{ plant.symptoms }}</p>
+    </div><br>
+    <h3>دلایل ایجاد</h3>
+    <div class="contents">
+    <p>{{ plant.causes }}</p>
+    </div><br>
+    <h3>راه های تشخیص</h3>
+    <div class="contents">
+    <p>{{ plant.detection }}</p>
+    </div><br>
+    <h3>راه های درمان</h3>
+    <div class="contents">
+    <p>{{ plant.management }}</p>
+    </div><br>
+    <h3>منابع</h3>
+    <div class="contents">
+    {% for refrence in refrence %}
+        <p style="display: flex; justify-content: left">{{ refrence }}</p>
+    {% endfor %}
+    </div>
+    </div>
+{% endblock %}

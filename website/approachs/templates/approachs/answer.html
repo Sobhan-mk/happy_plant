@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}
+    approach answer
+{% endblock %}
+{% block body %}
+<style>
+    body {
+        margin: 0;
+        padding: 10px;
+    }
+
+    h1 {
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        background-color: #262a33;
+        border-radius: 20px;
+        border: 1px solid #565656;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    ul, p, a {
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: white;
+    }
+
+    strong {
+        color: white;
+    }
+
+    svg {
+        margin-bottom: 5px;
+    }
+
+    p.error {
+        color: red;
+    }
+
+    .button-link {
+        display: flex;
+        border-radius: 10px;
+        height: 40px;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        background-color: #21be28;
+        border: 1px #21be28 solid;
+        text-decoration: none;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+    }
+    @media (min-width: 768px) {
+        .button-link {
+            width: 300px;
+        }
+
+    }
+</style>
+
+<h1>پاسخ پیشنهاد شما</h1>
+
+<ul>
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-envelope" viewBox="0 0 16 16">
+        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+    </svg>
+    <strong>{{ answer.approach.title }}</strong>
+</ul>
+
+<div class="container">
+    <p>{{ answer.approach.detail }}</p>
+</div>
+
+<ul>
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-check2" viewBox="0 0 16 16">
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
+    </svg>
+    <strong>پاسخ توسعه دهنده</strong>
+</ul>
+
+<div class="container" style="background-color: #3d4873;">
+    <p>{{ answer.approach_answer }}</p>
+</div>
+<div class="button-container">
+    <a href="{% url 'approachs:send_approach' %}" class="button-link">ثبت پیشنهاد جدید</a>
+</div>
+<br><br><br>
+{% endblock %}

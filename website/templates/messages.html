@@ -1,0 +1,25 @@
+{% load  static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+{% if messages %}
+    {% for msg in messages %}
+        <div class="message-container" style="color: gray; background-color: #494949; border-radius: 10px; border: 1px gray solid; height: 30px; width: 100%; display: flex; justify-content: center; align-items: center">
+            <p class="alert alert-{{ tags }}" style="color: lightgray; padding: 10px; margin: 10px 0">{{ msg }}</p>
+        </div>
+    {% endfor %}
+
+    <style>
+        @media (max-width: 768px) {
+            .message-container{
+                width: 100%;
+            }
+        }
+    </style>
+{% endif %}
+</body>
+</html>

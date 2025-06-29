@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+
+{% block title %}پروفایل{% endblock %}
+
+{% block body %}
+    <h1 style="color: white">حساب کاربری {{ user.username }}</h1>
+
+    <div class="page-container">
+        <div class="right-container">
+            <p style="color: white; font-size: 30px">گیاهان شما</p>
+
+                {% if user_plants %}
+                    {% for plant in user_plants %}
+                        <div class="container" style="display: flex; justify-content: space-between;  align-items: center; border-radius: 20px; border: 1px #595959 solid; padding: 10px; background-color: #262A33FF">
+                            <div>
+                                 <a href="{% url 'my_plants:plant_detail' plant.id %}" style="color: lightgray; font-size: 20px">
+                                    {{ plant.name }} : {{ plant.persian_name }}
+                                 </a>
+
+                            </div>
+
+                            <img src="{{ plant.plant_image.url }}" style="height: 70px; border-radius: 10px; border: 1px white solid">
+
+                        </div>
+                        <br>
+                    {% endfor %}
+                    <div style="display: flex; justify-content: center; gap: 10px">
+                        <a href="{% url 'my_plants:house_plants_names' %}" class="link-button">اظافه کردن گیاه جدید</a>
+                    <a class="big-red-link" href="{% url 'my_plants:user_plant_remover_all' %}">حذف همه گیاهان</a>
+                    </div>
+
+                {% else %}
+                    <div style="display: flex; justify-content: center">
+                        <a href="{% url 'my_plants:house_plants_names' %}" class="link-button">اضافه کردن گیاه جدید</a>
+                    </div>
+                {% endif %}
+
+            <hr style="color: white">
+            <p style="color: white; font-size: 30px">سوالات شما</p>
+        {% if user_questions %}
+                    <div class="other-fields" style="padding: 10px; display: flex; flex-direction: column;">
+            {% for question in user_questions %}
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <a href="{% url 'qa:edit_question' question.id %}" style="color: lightgray;">{{ question.title }}</a>
+                    <div style="display: flex; gap: 10px">
+                                    <a class="link" href="{% url 'qa:specific_answers' question.id %}" style="">دیدن پاسخ</a>
+                    <a class="red-link" href="{% url 'qa:delete_question' question.id %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-trash3" viewBox="0 0 16 16">
+                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                        </svg></a>
+                    </div>
+
+
+                </div>
+                <hr style="color: white;">
+            {% endfor %}
+        </div>
+
+                    <div style="display: flex; gap: 10px; justify-content: center">
+                    <a href="{% url 'qa:ask_questions' %}" class="link-button" style="margin-bottom: 20px;">پرسش سوال</a>
+                    <a class="big-red-link" href="{% url 'qa:delete_all_questions' %}">حذف همه سوالات</a>
+                    </div>
+        {% else %}
+            <p style="color: lightgray">هنوز سوالی وجود ندارد</p>
+            <div style="display: flex; justify-content: center">
+                <a href="{% url 'qa:ask_questions' %}" class="link-button" style="margin-bottom: 20px;">پرسش سوال</a>
+
+            </div>
+
+        {% endif %}
+
+        <hr style="color: white">
+
+            <p style="color: white; font-size: 30px">پیشنهادات و انتقادات شما</p>
+
+        {% if user_approachs %}
+                    <div class="other-fields" style="padding: 10px; display: flex; flex-direction: column;">
+                {% for approach in user_approachs %}
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <a href="{% url 'approachs:edit_approach' approach.id %}" style="color: lightgray">{{ approach.title }}</a>
+                        <div style="display: flex; justify-content: center; gap: 10px">
+                            <a class='link' href="{% url 'approachs:approach_answer' approach.id %}">دیدن پاسخ</a>
+                            <a class="red-link" href="{% url 'approachs:delete_approach' approach.id %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                            </svg></a>
+                        </div>
+                     </div>
+                    <hr style="color: white">
+                {% endfor %}
+            </div>
+            <div style="display: flex; justify-content: center; gap: 10px">
+                <a href="{% url 'approachs:send_approach' %}" class="link-button">ثبت پیشنهاد جدید</a>
+                <a href="{% url 'approachs:delete_all_approachs' %}" class="big-red-link">حذف همه پیشنهادات</a>
+            </div>
+        {% else %}
+            <p style="color: lightgray">هنوز پیشنهاد و انتقادی وجود ندارد</p>
+            <div style="display: flex; justify-content: center; gap: 10px">
+            <a href="{% url 'approachs:send_approach' %}" class="link-button">ثبت پیشنهاد جدید</a>
+            </div>
+        {% endif%}
+
+        </div>
+
+        <div class="form-container">
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+
+            <form method="POST" enctype="multipart/form-data" class="profile-update-form">
+                {% csrf_token %}
+                <p class="field-name">نام کاربری</p>
+                {{ user_form.username }}<br>
+                <p class="field-name">ایمیل</p>
+                {{ user_form.email }}<br>
+                {{ profile_form.as_p }}<br><br>
+
+                <button type="submit" class="submit-button">به روز رسانی</button><br><br>
+
+                <div style="display: flex; justify-content: center; gap: 5px">
+                <a href="{% url 'accounts:change_password' %}" class="link">تغییر رمز عبور</a><br><br>
+                <a href="{% url 'accounts:logout' %}" class="link">خروج از حساب کاربری</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .page-container {
+            display: flex;
+            width: 100%;
+            flex-direction: row-reverse;
+        }
+
+        .right-container {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .form-container {
+            flex: 0 0 300px;
+            display: flex;
+            justify-content: center;
+            height: 350px;
+            margin: 15px;
+        }
+
+        .profile-update-form {
+            border: 1px #595959 solid;
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            background-color: #262a33;
+        }
+
+        .other-fields {
+            border: 1px #595959 solid;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background-color: #262a33;
+        }
+
+        .field-name {
+            color: white;
+        }
+
+        .submit-button {
+            background-color: rgba(19, 192, 85, 0.99);
+            width: 100%;
+            height: 30px;
+            border-radius: 10px;
+            border: 1px solid #13C055FC;
+            color: white;
+            margin-bottom: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .submit-button:hover {
+            background-color: rgba(97, 206, 139, 0.99);
+        }
+
+        .link {
+            color: white;
+            background-color: #0F7CD5FF;
+            border: 1px #0F7CD5FF solid;
+            border-radius: 10px;
+            width: 140px;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 30px;
+            transition: 0.3s;
+        }
+
+        .link:hover{
+            background-color: #69b3e3;
+        }
+
+        .red-link {
+            color: white;
+            background-color: #c70d0d;
+            border: 1px #c70d0d solid;
+            border-radius: 10px;
+            width: 50px;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 30px;
+            transition: 0.3s;
+        }
+
+        .red-link:hover {
+            background-color: #c96472;
+        }
+
+        .big-red-link {
+           background-color: #c70d0d;
+            color: white;
+            border: 1px #c70d0d solid;
+            border-radius: 10px;
+            height: 30px;
+            width: 300px;
+            margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
+            display: flex
+        }
+
+        .link-button {
+            background-color: rgba(19, 192, 85, 0.99);
+            color: white;
+            border-radius: 10px;
+            border: 1px #13C055FC solid;
+            width: 300px;
+            height: 30px;
+            display: flex;
+            margin-left: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .link-button:hover {
+            background-color: rgba(19, 192, 85, 0.99);
+        }
+
+        .container {
+            display: flex;
+            padding-left: 230px;
+        }
+
+        @media (max-width: 768px){
+            .page-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-right: 10px;
+            }
+
+            .form-container{
+                margin:5px;
+                width: 90%;
+            }
+
+            .other-fields{
+                width: 100%;
+            }
+
+        }
+    </style>
+{% endblock %}

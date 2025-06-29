@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <style>
+
+        body {
+        margin: 0;
+        padding: 10px;
+        line-height: 1.6;
+    }
+
+    title{
+        color: lightgray;
+    }
+    h1 {
+        color: white;
+
+    }
+
+    .toc {
+        background-color: #38383b;
+    }
+
+    p {
+        color: lightgray;
+        font-size: 17px;
+    }
+
+    li {
+        color: lightgray;
+    }
+
+    .image-container img {
+        width: 100%;
+        max-width: 800px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+
+    .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    @media (min-width: 768px) {
+        .image-container img {
+            max-width: 600px;
+        }
+        .image-container {
+            margin: 0 10px;
+        }
+
+        p {
+            margin-left: 170px;
+            margin-right: 170px;
+        }
+    }
+
+    .title {
+        color: lightgray;
+    }
+    </style>
+    <h1>درباره مدل تشخیص مشکل گیاهان</h1>
+    <p>به معرفی مدل تشخیص دهنده مشکل گیاهان خانگی خیلی خوش اومدین. برای مشاهده کد های آموزش این مدل به آدرس زیر مراجعه کنید.</p>
+    <div class="toc">
+    <h2 style="color: white">فهرست مطالب</h2>
+
+            <ul >
+                <li><a href="#introduction" class="title">معرفی</a></li>
+                <li><a href="#data" class="title">دیتا</a></li>
+                <li><a href="#data-preprocessing" class="title">data-preprocessing</a></li>
+                <li><a href="#model structure" class="title">ساختار مدل</a></li>
+                <li><a href="#training" class="title">آموزش</a></li>
+                <li><a href="#evaluations" class="title">ارزیابی مدل</a></li>
+                <li><a href="#classes" class="title">کلاس های قابل تشخیص</a></li>
+            </ul><br>
+
+    </div>
+
+   <h1 id="introduction">معرفی</h1>
+    <p>به طور کلی، شما با یک مدل یادگیری عمیق که با تصاویر کار میکنه رو به رو هستید. مدلی که از لایه ها یا شبکه های CNN برای ساخت و آموزش اون استفاده شده. این مدل برای تشخیص بیماری گیاهان رزاعی از روی برگ اونها ساخته شده. بهترین زیان برنامه نویسی برای ساخت مدل های یادگیری ماشین زبانت پایتون هست. کتابخونه های زیادی در پارتون برای پیاده سازی یادگیری عمیق و کارکردن با تصاویر وجود داره. اما بهترین اونها، tensorflow و pytorch هستند. برای ساخت این مدل هم از pytorch استفاده شده. به طور کلی روند ساخت و آموزش این مدل خیلی مشابه مدل تشخیص گونه گیاهان خانکیه اما یک سری تفاوت های کوچیک در قالب دیتا و hyper parameters دارن. در ادامه درباره دیتای آموزش، روند آموزش و پردازشهای انجام شده روی دیتا، ارزیابی ها و کیفیت عملکرد و ... برای شما بیشتر توضیخ میدم.</p>
+    <div class="image-container">
+        <img src="{% static 'images/pytorch_picture.JPG' %}" class="image"><br>
+    </div>
+   <h1 id="data">دیتا</h1>
+    <p>دیتای استفاده شده بر روی این مندل تفاوت هایی نسبت به مدل تشخیص گیاهان خانگی داره. نام این دیتا، PlantLeafDiseases dataset است. این دیتا، دیتای خیلی بزرگتریه. حدودا 75000 دیتاسمپل در این دیتا وجود داشته. البته تنها دیتایی که برای آموزش اینت مدل استفاده شده، این دیتا نبوده. دو دیتای دیگر هم به این دیتا اضافه شده که یکی از اونها برای بیماری های برنج و دیگری برای گندم روده است. با این تفاصیر ،نهایتا بزرگیک دیتای من به 80000 دیتاسمپل میرسه. تصاویر موجود توی این دیتا، نمظم هستند. همه تصاویر دارای ابعاد یکسان (256X256) هستن و شرایط نوری و وضوح تصاویر مشابه همه. همچنین خیلی از تصاویر موجود در دیتا قبلا تغییراتی روی اونها اعمال شده بود. برای مثال شما میتونید چندین کپی از یک عکس رو با زاویه های چرخش، نور، brightness، contrast و ... متفاوت مشاهده کنید. آدرس های زیر شامل سه دیتایی هستند که در این پروژه استفاده شده:  </p>
+    <ul>
+        <li><a href="https://www.kaggle.com/datasets/vipoooool/new-plant-diseases-dataset">new plant leaf diseases dataset</a></li>
+        <li><a href="https://www.kaggle.com/datasets/vbookshelf/rice-leaf-diseases">rice leaf diseases dataset</a></li>
+        <li><a href="https://www.kaggle.com/datasets/olyadgetch/wheat-leaf-dataset">wheat leaf diseases dataset</a></li>
+    </ul>
+    <p>میزان پراکندگی دیتا در هرکدوم از کلاس هایی که مربوط به یک بیماری مشخص هستند، متفاوت بوده است. شرایط توضیع دیتاسمپل ها در بین کلاس هارو در گراف زیر مشاهده می کنید:</p>
+    <div class="image-container">
+    <img src={% static "images/diseased_num_labels.png" %} class="image">
+    </div>
+
+    <h1 id="data-preprocessing">data preprocessing</h1>
+    <p>پردازش های قبل از آموزش روی دیتا خیلی مرحله مهمیه و به شدت روی عملکرد مدل تاثیرگذاره. در این پروژه از تکنیک های مختلف data preprocessing استفاده شده که در ادامه درمورد اونها صحبت میکنم. اضافه کردن دیتای جدید به دیتای اصلی نوعی پردازش روی دیتا محسوب میشه. پس اولین کاری که در این راستا انجام شد اضافه کردن دیتای جدید به دیتای قبلی بود. مهمترین تکنیکی که در قالب data preprocessing در این پروژه استفاده شد، عمل data augmentation بود. با استفاده از ایتن تکنیک، از هر تصویر مپی هایی گرفته میشه که توی هر کدوم از تصاویر ویژگی های متفاوتی از تصویر دیده میشه و اینت ویژگی ها در هر تصویر تغییر کرده است. ویژگی هایی مثل نور، hue saturatoin ،brightness، contrast، horizontal-vertical flip، برش دادن زاویه چرخش عکس ها و ... در این تصاویر متفاوته.</p>
+    <p>گراف هایی آماده کردم که توی اونها چند مثال تصادفی از دیتا رو نشون میدم. همچنین یک گراف دیگه هم هست که در اون تصاویر تغییر یافته نشون داده شده تا دید کلی نسبت به تغییرات اعمال شده ایجاد بشه. اینت گراف هارو در قسمت پایین مشاهده می کنید:</p>
+    <div class="image-container">
+        <div style="display: flex; gap: 20px">
+        <img src={% static "images/normal_diseased_images.png" %} class="image">
+        <img src={% static "images/augmented_diseased_images.png" %} class="image">
+        </div>
+    </div>
+
+    <h1 id="model structure">ساختار مدل</h1>
+    <p>برخلاف مدل تشخیص گونه گیاهان خانگی، این مدل از ساختار خیلی پیچیده ای استفاده نمیکنه. در مدل تشخیص گیاهان  خانگی، مدل های resnet-50 و efficientnet با یکدیگر ادغام شده بودند. اما در این پورژه، امکان استفاده از چنین مدل پیچیده ای نبود. چراکه حجم دیتا چند برابر دیتای استفاده شده در پروژه گیاهان خانگی است. در نتیجه درصورت استفاده از مدل پیچیده، زمان ترینینگ خیلی زیاد میشه و توانایی ترین اون در پلتفرم colab که زمان محدودی برای استفاده از t4 runtime در اختیار من قرار داده بود وجود نداشت. همچنین خطر overfit هم وجود داشت. در نتیجه از مدل resnet-18 که مدل خیلی ساده تر و سبک تری بود استفاده کردم. لزومی هم برای استفاده از مدل های خیلی پیچیده نبود. چراکه تعداد زیاد دیتاسمپل ها این کسری رو جبران می کرد. مدل resnet-18 در حالت pretrained استفاده شد که قبلا روی دیتای خیلی بزرگی ترین شده بود. استفاده از مدل های از پیش ترین شده و آموزش اونها روی دیتای شخصی رو fine-tuning می نامند که تاثیر زیادی روی عملکرد مدل داره. </p>
+    <div class="image-container">
+        <img src="{% static 'images/resnet18-structure.png' %}" class="image">
+    </div>
+
+    <h1 id="training">آموزش</h1>
+    <p>روند آموزش این مدل، روند طولانی و سامل مراحل زیادیه. برای ساخت این مدل از الگوریتم cross_validation استفاده شده. این تکنیک دیتای ترین رو به fold های مشخیص و هم اندازه تقسیم می کنه و یکی از این fold ها رو به عنوان valdiatoin set اون فولد انتخاب میکنه. این عمل برای دفعات مشخص و دلخواه که به اون n_splits گفته میشه انجام میشه و در هر split، فولدی که برای valdaion استفاده شده تغییر پیدا میکنه. البته تعداد fold ها و n_splits با هم برابره. این الگوریتنم به شدت برای علکرد مدل مفیده و باعث افزایش دقت مدل و دید بهتر از عملکرد و ارزیابی بهتر مدل میشه. در ادامه تصویری که در اون عمل cross-validation توضیخ داده شده رو مشاهده می کنید:</p>
+    <div class="image-container">
+        <img src="{% static 'images/cross-validation.png' %}" class="image">
+    </div>
+    <p>پس از عمل cross-validation،در هر fold دو ست training و validation ایجاد میشه. در نتیجه مدل رو روی دیتای ترینینگ آموزش میدیم. برای آموزش مدل های دیپلرنینگ این پارامتر ها معولا تعریف میشن:</p>
+    <ul>
+    <li>loss function</li>
+    <li>optimizer</li>
+    <li>scheduler</li>
+    </ul>
+    <p>از لاس فانکشن برای محاسبه میران خطا در مدل و بدست آوردن مقادیر جدید برای model parameters یا model weights استفاده میشه. مشخصا این عمل و سرع انجامش به مقدار learning_rate بستگی داره. در مدل های دیپ لرنینگ و classification معولا از CrossEntropy و CategoricalCrossEntropy استفاده میشه. در این پروژه هم از cross entropy استفاده شده. با استفاده از این لاس فانکش هم مدل رو ترین می کنیم و هم میزان loss در validation_set هر split رو محاسبه می کنیم.</p>
+    <p>اوپتیمایزر برای سرعت بخشیدن به مدل جلوگیری از overfit استفاده میشه. دوتا از معروف ترین اوپیمایزر ها، SGD(StochasticGradientDecent) و Adam هستند. در این پروژه هم از Adam استفاده شده است. </p>
+    <p>از scheduler ها برای تغییر و بهینه کردن learning-rate در طول آموزش استفاده می شود که در این پروژه از اونها استفاده شده.</p>
+
+    <h1 id="evaluations">ارزیابی</h1>
+    <p>روش های مختلفی برای ارزیابی مدل های classoficatoin وجود داره اما توی این پروژه از accuracy و loss و از ماتریکس confusion یا confusoin-matrix استفاده شده است. در تصویر زیر acuuracy و loss رو در طول آموزش مشاهده می کنید:</p>
+    <div class="image-container">
+        <img href="{% static 'images/diseased_plants_accuracy_loss_plot.png' %}" class="image">
+    </div>
+    <p>از نظر من بهترین راه ارزیابی مدل های classification استفاده از conf-matrix است. این هم از پلات confusion-matrix:</p>
+    <div class="image-container">
+        <img src="{% static 'images/diseased_plantconf_matrix.jpg' %}" class="image">
+    </div>
+
+    <h1 id="classes">کلاس های قابل تشخیص</h1>
+    <p>این مدل حدودا توانایی شناسایی چهل نوع بیماری گیاهان زراعی رو داراست. در ادامه این فهرست رو مشاهده می کنید:</p>
+    <ul>
+      <li>Apple___healthy</li>
+      <li>Blueberry___healthy</li>
+      <li>Soybean___healthy</li>
+      <li>Brown spot_rice_leaf_diseases_rice_leaf_diseases</li>
+      <li>Corn_(maize)___Common_rust_</li>
+      <li>Ill_cucumber</li>
+      <li>Tomato___Tomato_mosaic_virus</li>
+      <li>Tomato___Septoria_leaf_spot</li>
+      <li>stripe_rust_wheat_leaf_wheat_leaf</li>
+      <li>Corn_(maize)___Northern_Leaf_Blight</li>
+      <li>Tomato___Leaf_Mold</li>
+      <li>Tomato___Tomato_Yellow_Leaf_Curl_Virus</li>
+      <li>Pepper,_bell___healthy</li>
+      <li>Tomato___Late_blight</li>
+      <li>Tomato___Target_Spot</li>
+      <li>Tomato___Spider_mites Two-spotted_spider_mite</li>
+      <li>Pepper,_bell___Bacterial_spot</li>
+      <li>Tomato___Early_blight</li>
+      <li>Corn_(maize)___healthy</li>
+      <li>Potato___Late_blight</li>
+      <li>Strawberry___healthy</li>
+      <li>Apple___Cedar_apple_rust</li>
+      <li>Grape___healthy</li>
+      <li>Healthy_wheat_leaf_wheat_leaf</li>
+      <li>Grape___Esca_(Black_Measles)</li>
+      <li>Peach___Bacterial_spot</li>
+      <li>Orange___Haunglongbing_(Citrus_greening)</li>
+      <li>Bacterial leaf blight_rice_leaf_diseases_rice_leaf_diseases</li>
+      <li>Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot</li>
+      <li>Squash___Powdery_mildew</li>
+      <li>Leaf smut_rice_leaf_diseases_rice_leaf_diseases</li>
+      <li>good_Cucumber</li>
+      <li>Raspberry___healthy</li>
+      <li>Cherry_(including_sour)___healthy</li>
+      <li>septoria_wheat_leaf_wheat_leaf</li>
+      <li>Tomato___Bacterial_spot</li>
+      <li>Grape___Black_rot</li>
+      <li>Strawberry___Leaf_scorch</li>
+      <li>Tomato___healthy</li>
+      <li>Grape___Leaf_blight_(Isariopsis_Leaf_Spot)</li>
+      <li>Apple___Apple_scab</li>
+      <li>Cherry_(including_sour)___Powdery_mildew</li>
+      <li>Potato___Early_blight</li>
+      <li>Peach___healthy</li>
+      <li>Apple___Black_rot</li>
+      <li>Potato___healthy</li>
+    </ul>
+
+{% endblock %}

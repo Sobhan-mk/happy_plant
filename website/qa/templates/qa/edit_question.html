@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    my_questions
+{% endblock %}
+
+{% block body %}
+    <style>
+        .background {
+            background: linear-gradient(to right, rgb(43,48,52), rgba(89,91,93,0.79));
+        }
+
+        .heading {
+            color: white;
+        }
+
+
+        .form-title, .form-topic, .form-detail {
+            color: white;
+        }
+
+        .submit-button {
+            background-color: #13C055FC;
+            color: white;
+            border: 1px lightgray solid;
+            border-radius: 10px;
+            width: 300px;
+            height: 30px;
+        }
+    </style>
+
+    <div class="background">
+        <ul><h1 class="heading">وارایش سوال {{ question_title }}</h1></ul><br>
+    </div><br>
+
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <p class="form-title">سرتیتر</p>
+            {{ form.title }}<br><br>
+            <p class="form-topic">سوال شما در چه موردی است؟</p>
+            {{ form.topic }}
+            <p class="form-detail">جزئیات سوال</p>
+            {{ form.detail }}<br>
+            <button type="submit" class="submit-button">ثیت ویریش</button>
+        </form>
+    </div><br>
+{% endblock %}

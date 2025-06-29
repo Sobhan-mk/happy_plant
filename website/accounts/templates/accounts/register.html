@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Register
+{% endblock %}
+{% block body %}
+    <div class="split right">
+        <div class="centered">
+            <h1 class="persian-text" style="color: white">حساب کاربری بسازید</h1>
+            <p style="color: white">صفحه ساخت حساب کاربری</p>
+        </div>
+    </div>
+    <div class="split left">
+        <div class="centered">
+            <div class="container">
+                <form method="post">
+                    <div class="form-header">
+                        <img src="{% static 'images/light_logo.jpg' %}" class="logo"><br><br>
+                    </div>
+
+                    {% csrf_token %}
+
+                    <strong class="field_names">نام کاربری</strong>
+                    {{ form.username }}<br><br>
+
+                    <strong class="field_names">ایمیل</strong>
+                    {{ form.email }}<br><br>
+
+                    <strong class="field_names">رمز عبور</strong>
+                    <div class="password-info">
+                        <p class="info">رمز عبور شما باید شامل حروف کوچک و بزرگ انگلیسی و اعداد وعلامت هایی مثل @،# و ... باشد.</p>
+                    </div>
+                    {{ form.password_1 }}<br><br>
+
+                    <strong class="field_names">تکرار رمز عبور</strong>
+                    {{ form.password_2 }}<br><br>
+
+                    <p style="color: red">{{ error_message }}</p>
+
+                    <button type="submit" class="submit-button">ساخت حساب کاربری</button><br><br>
+                    <p class="info">قبلا حساب ساخته اید؟</p>
+                    <a href="{% url 'accounts:login' %}" class="login-link">ورود</a><br>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .split {
+            height: 100%;
+            width: 50%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        .left {
+            left: 0;
+            background-color: white;
+        }
+
+        .right {
+            right: 0;
+            background: linear-gradient(to bottom left, rgba(19, 192, 85, 0.99), #031311);
+        }
+
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .field_names {
+            font-size: 20px;
+        }
+
+        .info {
+            font-size: 14px;
+        }
+
+        .submit-button {
+            background-color: #2f2f2f;
+            border-radius: 10px;
+            height: 50px;
+            width: 500px;
+            border: 1px lightgray solid;
+            color: white;
+            transition: background 0.3s ease, color 0.3s ease;
+            box-shadow: 0 0 20px rgba(30, 30, 30, 0.27);
+        }
+
+        .submit-button:hover {
+            background-color: #494949;
+        }
+
+        .login-link {
+            justify-content: center;
+            display: flex;
+            color: black;
+            font-size: 17px;
+        }
+
+        .logo {
+            height: 70px;
+            display: block;
+            margin: 0 auto; /* Center the image horizontally */
+        }
+
+        @media (max-width: 768px) {
+            .split {
+                height: 50%;
+                width: 100%;
+                top: auto;
+                bottom: auto;
+                position: static;
+            }
+
+            .left, .right {
+                width: 100%;
+            }
+
+            .centered {
+                position: static;
+                transform: none;
+                top: auto;
+                left: auto;
+                margin: 0 auto;
+            }
+
+            .left {
+                order: 2;
+            }
+
+            .right {
+                order: 1;
+            }
+
+            .submit-button {
+                width: 100%;
+            }
+
+            .password-info {
+                width: 100%;
+            }
+
+            .logo {
+                display: block;
+                margin: 0 auto; /* Center the image horizontally */
+            }
+        }
+    </style>
+{% endblock %}

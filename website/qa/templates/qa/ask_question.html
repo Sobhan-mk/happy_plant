@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    my_questions
+{% endblock %}
+
+{% block body %}
+    <style>
+
+        .heading {
+            color: white;
+        }
+
+        .form-title, .form-topic, .form-detail {
+            color: white;
+        }
+
+        .submit-button {
+            background-color: #13C055FC;
+            color: white;
+            border: 1px #13C055FC solid;
+            border-radius: 10px;
+            width: 300px;
+            height: 30px;
+        }
+
+        .container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                width: calc(100% - 40px); /* Ensures 20px space from edges */
+                margin: 20px;
+                align-items: stretch;
+            }
+
+            .submit-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+
+    <div class="background">
+        <ul><h1 class="heading">پرسش سوال</h1></ul><br>
+    </div><br>
+
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <p class="form-title">سرتیتر</p>
+            {{ form.title }}<br><br>
+            <p class="form-topic">سوال شما در چه موردی است؟</p>
+            {{ form.topic }}<br><br>
+            <p class="form-detail">جزئیات سوال</p>
+            {{ form.detail }}<br><br>
+            <button type="submit" class="submit-button">ثیت سوال</button>
+        </form>
+    </div><br>
+{% endblock %}

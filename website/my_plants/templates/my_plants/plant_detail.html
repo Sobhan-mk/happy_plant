@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}plant details{% endblock %}
+{% block body %}
+    <br><br><br>
+    <div class="page-container" style="margin: 0 10px">
+    <div style="display: flex; justify-content: center">
+    <div class="header-container">
+        <div class="header-in-container">
+        <img src="{{ plant.plant_image.url }}" class="plant-image" style="border-radius: 20px; width: 350px">
+        <p style="font-size: 50px">{{ plant.name }}</p>
+        <p style="font-size: 25px">نام فارسی: {{ plant.persian_name }}</p>
+        <p style="font-size: 25px">نام علمی: {{ plant.scientific_name }}</p></div>
+    </div>
+</div>
+    <ul><p style="font-size: 40px; color: white">توضیحات</p></ul>
+    <div class="info-container">
+        <p>{{ plant.description }}</p>
+    </div>
+
+    <ul><p style="font-size: 40px; color: white">شرایط نگهداری</p></ul>
+    <div class="info-container">
+        <p>{{ plant.conditions }}</p>
+    </div>
+
+    <ul><p style="font-size: 40px; color: white">مشکلات رایج</p></ul>
+    {% if plant.deseases %}
+        <div class="problem-container">
+            <p>{{ plant.deseases }}</p>
+        </div>
+    {% else %}
+        <p style="color: lightgray; margin: 20px">فهلا اطلاعاتی در دسترس نیست</p>
+    {% endif %}
+    {% if user.is_authenticated %}
+            {% if plant in user_plants %}
+                <a href="{% url 'my_plants:user_plant_remover' plant.id %}" class="remove-button">حذف کردن {{ plant.persian_name }} از گیاهان خانگی خود </a>
+            {% else %}
+                <a href="{% url 'my_plants:user_plant_adder' plant.id %}" class="add-button">اضافه کردن {{ plant.persian_name }} به گیاهان خانگی خود</a>
+            {% endif %}
+    {% else %}
+            {% if plant in user_plants %}
+                <a href="{% url 'accounts:login'%}" class="remove-button">حذف کردن {{ plant.persian_name }} از گیاهان خانگی خود </a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}" class="add-button">اضافه کردن {{ plant.persian_name }} به گیاهان خانگی خود</a>
+            {% endif %}
+    {% endif %}
+
+</div>
+    <style>
+    .header-container {
+        border-radius: 50px;
+        border: 1px lightgray solid;
+        height: 500px;
+        width: 550px;
+        padding: 20px;
+    }
+        .header-in-container {
+            background-color: #262a33;
+            box-shadow: 0 0 70px rgba(103, 255, 114, 0.64), /* Green glow */
+                        0 0 70px rgba(106, 255, 116, 0.71), /* Larger green glow */
+                        0 0 100px rgba(55, 255, 67, 0.4); /* Even larger green glow */
+            text-align: center;
+            color: white;
+            padding: 20px;
+            height: 100%;
+            width: 100%;
+            border-radius: 35px;
+        }
+
+        .header-container h1, .header-container h4 {
+            margin: 0;
+            padding: 5px 0;
+        }
+
+        .plant-image {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .info-container, .problem-container {
+            background-color: #262a33;
+            border-radius: 20px;
+            border: 1px solid gray;
+            padding: 20px;
+            margin: 20px;
+            color: lightgray;
+        }
+
+        .remove-button, .add-button {
+            display: flex;
+            border-radius: 10px;
+            height: 50px;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: auto;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .remove-button {
+            background-color: #b41414;
+            border: 1px lightgray solid;
+        }
+
+        .remove-button:hover {
+            background-color: #c95050;
+        }
+
+        .add-button:hover {
+            background-color: #76da7a;
+        }
+
+        .add-button {
+            background: #13C055FC;
+        }
+    </style>
+{% endblock %}
+</html>

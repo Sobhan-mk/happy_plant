@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<style>
+    body {
+        margin: 0;
+        padding: 10px;
+        line-height: 1.6;
+    }
+
+    h1 {
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: white;
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    p {
+        color: lightgray;
+        margin: 0 10px 20px;
+        font-size: 16px;
+        line-height: 1.8;
+    }
+
+    li {
+        color: lightgray;
+    }
+
+    .toc {
+        background: #32323a;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+
+    .toc a {
+        color: lightgray;
+        text-decoration: none;
+    }
+
+    .toc a:hover {
+        text-decoration: underline;
+    }
+
+    .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .image-container img {
+        width: 100%;
+        max-width: 800px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+
+    .image-caption {
+        text-align: center;
+        color: lightgray;
+        margin-bottom: 20px;
+    }
+
+    @media (min-width: 768px) {
+        h2 {
+            text-align: center;
+            margin-right: 50px;
+        }
+
+        p {
+            margin-left: 170px;
+            margin-right: 170px;
+        }
+
+        .image-container img {
+            max-width: 600px;
+        }
+
+
+    }
+</style>
+
+<h1>درباره مدل تشخیص دهنده نوع گیاهان خانگی</h1>
+<p>به معرفی و بررسی مدل یادگیری عمیق تشخیص دهنده نوع گیاهان خانگی خیلی خیلی خوش اومدین!</p>
+    <a href="https://github.com/Sobhan-mk/house-plant-species-detection-">دانلود فایل آموزش مدل تشخیص نوع گیاهان خانگی</a>
+    <br><br>
+<div class="toc">
+    <h2>فهرست مطالب</h2>
+    <ul>
+        <li><a href="#introduction">معرفی</a></li>
+        <li><a href="#data preprocessing">data preprocessing</a></li>
+        <li><a href="#section3">ترینینگ</a></li>
+        <li><a href="#model structure">ساختار مدل</a></li>
+        <li><a href="#class-lookup-dictionary">کلاس های قابل تشخیص</a></li>
+        <li><a href="#section4">ارزیابی مدل</a></li>
+    </ul>
+</div>
+
+<h2 id="introduction">معرفی</h2>
+<p>این مدل یک مدل یادگیری عمیقه که با استفاده از زبان پایتون نوشته شده. از اونجایی که این مدل یک مدل یادگیری عمیق هست و روی تصاویر عملیات انجام میده، با استفاده از شبکه های کانوولوشن یا CNN network layers ساخته شده. فریم ورک ها و کتابخونه های زیادی برای پیاده سازی این نوع شبکات و لایه ها وجود داره اما بهترین اونها tensorflow  و pytorch هستند.</p>
+<p>من برای ساخت مدل خودم از پایتورچ استفاده کردم. یکمی کار کردن باهاش سخت تره اما نسبت به tensorflow و keras انعطاف پذیری بیشتری داره. البته برای مدل تشخیص مشکل گیاهان دوتا مدل جداگانه با استفاده از tensorflow و pytorch ترین کردم. اما پایتورچ عملکرد بهتری داشت.<a href="{% url 'PLDdetector:detector_model' %}">مدل تشخیص مشکل گیاهان</a></p>
+<div class="image-container">
+    <img src="{% static 'images/tensorflow_vs_pytorch.jpeg' %}" alt="tensorflow vs pytorch">
+</div>
+
+<p>بگذریم! البته بگم که من از سرویس کولب برای ترین مدل هام استفاده میکردم. همونطور که میدونید کولب محیط برنامه نویسی ابری هستش که با اتصال به سرور های اون میتونید به دریایی از پکیج های پایتونی دسترسی داشته باشید. همچنین امکانات سخت افزاری جالب و بسیار کاربردی هم در اختیار شما قرار میده؛ از جمله حدود 100 گیگابایت حافظه disk و 16 گیگابایت حافظه رم و از همه مهم تر در t4 GPU runtime که رانتایم رایگان کارت گرافیک دار هست، کار گرافیک انویدیا و قدرت پردازشی هسته های cuda رو در اختیارتون قرار میده!</p>
+<p>روند کار به چند بخش تقسیم میشه. در ابتدا دیتاست رو دانلود میکنم(<a href="https://www.kaggle.com/datasets/kacpergregorowicz/house-plant-species">مشاهده دیتاست</a>) و در ادامه ترنسفرمر هایی که برای data augmentation آماده کردم رو روی چند دیتا سمپل رندم اجرا می کنم و نمایششون میدم تا به دید کلی از دیتا و دیتای آماده شده برای مدل داشته باشم. در ادامه تعداد دیتاسمپل های موجود برای هر کدام از کلاس ها رو نشون میدم. مدلم که متشکل ResNet50 و EficientNet هست رو ادغام میکنم. cross validation انجام میدم و مدلم رو روی دیتا های لود شده ترین و آزمایش می کنم.</p>
+
+<h2 id="data preprocessing">data preprocessing</h2>
+<p>قبل از هرچیز ابتدا کتابخونه های مورد نیازم رو ایمپورت می کنم و یک سری اقدامات برای استفاده از کارت گرافیک و cuda و هسته های اضافی cpu انجام میدم. از ماژول torchvision.transforms برای data augmentation استفاده می کنم و با استفاده از اون اندازه، hue saturation، زاویه، brightness، contrast و .. تصاویر رو تغییر میدم. این بخش تاثیر خیلی مهمی روی دقت مدل داره. در تصاویر پایین چند تصویر عادی و چند تصویری که تغییرات روی اونها اعمال شده رو مشاهده می کنید:</p>
+<div class="image-container">
+    <div>
+        <img src="{% static 'images/normal_pictures.jpg' %}" alt="normal pictures">
+        <p class="image-caption">تصاویر معمولی</p>
+    </div>
+    <div>
+        <img src="{% static 'images/augmented pictures.JPG' %}" alt="augmented pictures">
+        <p class="image-caption">تصاویر تغییر یافته</p>
+    </div>
+</div>
+<p>همچنین گرافی برای نمایش تعداد دیتاسمپل های موجود برای هر کلاس درست کردم. همونطور که می بینید بیشترین تعداد دیتا سمپل برای گیاه monstera و کمترین برای گیاه yucca است.</p>
+<div class="image-container">
+    <img src="{% static 'images/num_datasamples.jpg' %}" alt="num datasamples">
+</div>
+
+<p>دیتا به صورت آماده به دو گروه train و validation تقسیم بندی نشده بود. در نتیجه در دو دایرکتوری جداگانه و به نسبت 0.1 اونها رو دسته بندی کردم. به دلیل اینکه دیتاسمپل ها در کل خیلی زیاد نبودند ترجیه دادم مقدار کمتر از حد معمول برای validation اختصاص بدم.</p>
+
+<h2 id="section3">ترینینگ</h2>
+<p>وقت گیر ترین و چالشی ترین بخش کل این وبسایت، بخش ترین مدل هاش بود. مدام با ارور های مربوط به نا هماهنگی آرایه های عددی و ماتریکس ها مواجه میشدم. حتی کوچکترین غلط یا جا افتادن یک مرحله کوچیک کل کار رو خراب میکرد. از اونجایی هم که زمان من برای ترین مدل توی کولب محدود بود، دردسر زیادی داشتم. اما نتیجه رضایت بخش بود. در ابتدا نیازمندیم یک کلاس تحت عنوان ImageDataset یا چیزی شبیه به اون ایجاد کنیم. با استفاده از این کلاس ما باید دیتامون رو (یعنی هر کدوم از تصاویر) لود کنیم، transformation هارو روش اعمال کنیم و ابعاد تصاویر و دیتای خروجی رو بر گردونیم. اگر این مرحله به درستی انجام بشه ما میتونیم با استفاده از DataLoader تصاویمون رو لود و برای مدل قابل استفاده کنیم. برای لود کردن تصاویر، از هسته های cpu که در ابتدا تعریف کردم استفاده کردم. این کار باعث افزایش سرعت لود کردن دیتا میشه.</p>
+    <p>هر مدل یادگیری عمیق نیازمند یک لاس فانکشن حرفه ایه. برای کارهایی مثل logistic resgressoin and linear regression  و برخی از پروژه های پیشرفته تر از MeanSquaredError(MSE) استفاده میشود. اما بهترین لاس فانکشن برای classification، دو لاس فانکشن CrossEntropy و CategoricalCrossEntropy هستند. در این پروژه نیز از CrossEntropy استفاده شده است. همچنین برای optimizer از StochasticGradientDecent(SGD) استفاده شده است که سرعت ترینینگ رو به شدت افزایش میده.</p>
+    <p>یکی از تکنیک های خلاقانه در ماشین لرنینگ تکنیک schedule کردن است. ما با استفاده از این تکنیک می توانیم مقدار learning_rate رو در طول آموزش تغییر بدیم. در اینت پروژه از ReduceLROnPlateau به عنوان learning_rate_scheduler استفاده شده که در طول ترینینگ مقدار لرنینگ ریت رو تنظیم می کند.</p>
+    <p>قسمت اصلی یادگیری ایجاست. ابتدا مدل رو روی دیتای لود شده ترین می کنیم؛ با استفاده از لاس فانکشن، مقدار accuracy و loss رو محاسبه می کنیم. پارامتر های مدل یا model weights رو آپدیت می کنیم. مدل رو در حالت evaluation قرار میدیم. دیتای validation مربوط به اون kfold رو پیشبینی و مفدار accuracy و loss رو محاسبه می کنیم و مقادیر برست اومده رو ذخیره می کنیم. این کارها در هر ایپاک تکرار میشه. </p>
+    <p>:دیتایی که برای ترین این مدل استفاده شده شامل گیاهان زیر است. در نتیجه تنها توانایی شناسایی این گیاهان رو داره:</p>
+
+<h2 id="class-lookup-dictionary"></h2>
+    <div class="class-lookup-dictionary-container">
+        <ul>
+          <li>African Violet (Saintpaulia ionantha)</li>
+          <li>Begonia (Begonia spp.)</li>
+          <li>Tulip</li>
+          <li>Venus Flytrap</li>
+          <li>Prayer Plant (Maranta leuconeura)</li>
+          <li>Parlor Palm (Chamaedorea elegans)</li>
+          <li>Hyacinth (Hyacinthus orientalis)</li>
+          <li>Rubber Plant (Ficus elastica)</li>
+          <li>Money Tree (Pachira aquatica)</li>
+          <li>Elephant Ear (Alocasia spp.)</li>
+          <li>Aloe Vera</li>
+          <li>Chinese Money Plant (Pilea peperomioides)</li>
+          <li>Iron Cross begonia (Begonia masoniana)</li>
+          <li>Tradescantia</li>
+          <li>Snake plant (Sanseviera)</li>
+          <li>Chrysanthemum</li>
+          <li>Daffodils (Narcissus spp.)</li>
+          <li>Calathea</li>
+          <li>Bird of Paradise (Strelitzia reginae)</li>
+          <li>Cast Iron Plant (Aspidistra elatior)</li>
+          <li>Kalanchoe</li>
+          <li>ZZ Plant (Zamioculcas zamiifolia)</li>
+          <li>Lilium (Hemerocallis)</li>
+          <li>Boston Fern (Nephrolepis exaltata)</li>
+          <li>Polka Dot Plant (Hypoestes phyllostachya)</li>
+          <li>Anthurium (Anthurium andraeanum)</li>
+          <li>Birds Nest Fern (Asplenium nidus)</li>
+          <li>Poinsettia (Euphorbia pulcherrima)</li>
+          <li>Ponytail Palm (Beaucarnea recurvata)</li>
+          <li>Dracaena</li>
+          <li>Pothos (Ivy arum)</li>
+          <li>Areca Palm (Dypsis lutescens)</li>
+          <li>Chinese evergreen (Aglaonema)</li>
+          <li>Rattlesnake Plant (Calathea lancifolia)</li>
+          <li>Dumb Cane (Dieffenbachia spp.)</li>
+          <li>Yucca</li>
+          <li>Ctenanthe</li>
+          <li>Asparagus Fern (Asparagus setaceus)</li>
+          <li>Schefflera</li>
+          <li>Sago Palm (Cycas revoluta)</li>
+          <li>Monstera Deliciosa (Monstera deliciosa)</li>
+          <li>Peace lily</li>
+          <li>Christmas Cactus (Schlumbergera bridgesii)</li>
+          <li>Lily of the valley (Convallaria majalis)</li>
+          <li>Orchid</li>
+          <li>English Ivy (Hedera helix)</li>
+          <li>Jade plant (Crassula ovata)</li>
+        </ul>
+    </div>
+
+<h2 id="section4">ارزیابی</h2>
+<p>برای ارزیابی این مدل از دو روش استفاده شده: یکی بر اساس مفدار accuracy و loss در طول ترینینگ و اون یکی confusion matrix است. از نظر من بهترین راه بررسی کردن عملکرد مدل های classification کانفیوژن ماتریکسه. عکس زیر نمودار تغییرات دقت و اشتباهات رو در طول یادگیری نشون میده:</p>
+<div style="text-align: center;">
+    <img src="{% static 'images/house_plants_accuracy_loss.JPG' %}" style="max-width: 100%; height: auto; border-radius: 20px">
+</div>
+<p>این گراف هم confusoin matrix رو نشون میده:</p>
+<div style="text-align: center;">
+    <img src="{% static 'images/conf_matrix.jpg' %}" style="max-width: 100%; height: auto; border-radius: 20px">
+</div>
+
+{% endblock %}

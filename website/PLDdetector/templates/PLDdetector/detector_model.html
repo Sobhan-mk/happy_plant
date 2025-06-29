@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+        <style>
+    .page-container {
+        margin: 0 20px;
+    }
+    h1 {
+        color: white;
+    }
+
+    p {
+        color: lightgray;
+    }
+
+    .content {
+        color: lightgray;
+        display: flex;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+        border-radius: 30px;
+        border: 1px white solid;
+    }
+
+    .form-container {
+        width: 100%;
+        display: flex;
+        background-color: #313138;
+        border-radius: 20px;
+        height: 100%;
+        padding: 15px;
+        box-shadow: 0 0 70px rgba(41, 126, 213, 0.64),
+            0 0 100px rgba(98, 29, 180, 0.71),
+            0 0 200px rgba(143, 14, 210, 0.4);
+    }
+
+    .submit-btn {
+        background-color: #246fbb;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        color: white;
+        height: 40px;
+        width: 300px;
+        border-radius: 10px;
+        border: 1px solid #246fbb;
+    }
+
+    hr {
+        color: white;
+    }
+
+    .result-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .plant-card {
+        background-color: #313138;
+        border-radius: 20px;
+        padding-bottom: 10px;
+        box-shadow: 0 0 70px rgba(210, 167, 26, 0.86),
+            0 0 100px rgba(204, 68, 18, 0.71),
+            0 0 200px rgba(210, 14, 14, 0.4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+
+    .plant-card-border {
+        border: 1px white solid;
+        border-radius: 30px;
+        width: 280px;
+        padding: 20px;
+    }
+
+    .button-link {
+            background-color: #1d639f;
+            border-radius: 10px;
+            height: 40px; /* Adjusted height */
+            width: 220px; /* Adjusted width */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+    .button-link:hover {
+        background-color: #20b2a1;
+    }
+
+    .example-image {
+        width: 180px;
+        border-radius: 20px
+    }
+
+    @media (max-width: 768px) {
+        .example-image {
+            width: 90px;
+        }
+    }
+
+    .healthy-container {
+        width: 400px;
+        height: 70px;
+        border-radius: 30px;
+        border: 1px solid white;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .healthy-plantcard{
+        border-radius: 20px;
+        box-shadow: 0 0 70px rgba(26, 210, 35, 0.86),
+            0 0 100px rgba(18, 204, 49, 0.71),
+            0 0 200px rgba(14, 210, 105, 0.4);
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+    </style>
+    <div class="page-container">
+    <h1>تشخیص گیاهان آسیب دیده از روی برگ</h1><br>
+    <div class="content">
+        <p>شما رو به مدل تشخیص دهنده مشکل گیاهان آسیب دیده معرفی می کنم! فقط تصویری از برگ گباه آسیب دیده تون براش ارسال کنید و تمام.</p>
+    </div><hr><br>
+
+    <div class="container">
+        <div class="form-container">
+            <form method="post" enctype="multipart/form-data" style="width: 100%">
+                {% csrf_token %}
+                {{ form.image }}
+                <br>
+                <button type="submit" class="submit-btn">ارسال</button>
+            </form>
+        </div>
+    </div><br><br><br>
+    <div class="result-container">
+        {% if diseased_plant %}
+                <div class="plant-card-border">
+                    <div class="plant-card">
+                        <img src="{{ diseased_plant.image.url }}" style="width: 239px; border-top-left-radius: 20px; border-top-right-radius: 20px">
+                        <p>{{ diseased_plant.common_name }}</p>
+                        <p>{{ diseased_plant.scientific_name }}</p>
+                        <p>{{ diseased_plant.persian_name }}</p>
+                        <div style="display: flex; justify-content: center">
+                            <a href="{% url 'PLDdetector:plant_diseased_detail' diseased_plant.id %}" class="button-link">دیدت توضیحات</a>
+                        </div>
+                    </div>
+                </div>
+
+        {% elif str_detection %}
+            <div class="prediction">
+                <div class="healthy-container">
+                    <div class="healthy-plantcard">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-check-lg" viewBox="0 0 16 16">
+                          <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+                        </svg>
+                        <p style="font-size: 20px">{{ str_detection }}</p>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="prediction">
+                <p>ابتدا تصویری وارد کنید تا نتیجه را ببینید.</p>
+            </div>
+        {% endif %}
+        <hr><br>
+    </div>
+    <h3 style="color: white">چند مثال از تصاویر ناسب برای این مدل</h3><br>
+    <div style="display: flex; justify-content: center">
+        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; background-color: #333436; border-radius: 30px; border:1px solid #5e5e5e; width: 1000px; padding: 27px">
+
+            {% for sample in random_samples %}
+                <img src="{% static sample %}" class="example-image">
+            {% endfor %}
+        </div>
+    </div><br>
+    <p style="color: gray">توجه داشته باشید که این مدل مانند تمامی مدل های دیگر یادگپیری عمیق، امکان خطا دارد.</p>
+    </div>
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% block title %}
+    house plant species detector
+{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            color: white;
+        }
+        .container-custom {
+            border-radius: 35px;
+            justify-content: center;
+            display: flex;
+            padding: 15px;
+            border: 1px white solid;
+
+        }
+        .submit-btn {
+            color: white;
+            background-color: #0f7cd5;
+            height: 40px;
+            width: 300px;
+            border: 1px #0f7cd5 solid;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #6ea6d5;
+            border: 1px white solid;
+        }
+        .hr-custom {
+            color: white;
+        }
+        .plant-info {
+            color: lightgray;
+        }
+        .container-bg {
+            background-color: #262a33;
+            border-radius: 30px;
+            border: 1px solid #606060;
+            padding: 20px;
+            margin: 0px;
+            justify-content: center;
+        }
+        .center-image {
+            width: 100%;
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+        }
+
+        .plant-card {
+            box-shadow: 0 0 70px rgba(103, 255, 114, 0.64),
+            0 0 100px rgba(106, 255, 116, 0.71),
+            0 0 200px rgba(55, 255, 67, 0.4);
+
+        }
+
+        .form-container {
+            box-shadow: 0 0 70px rgba(41, 126, 213, 0.64),
+            0 0 100px rgba(98, 29, 180, 0.71),
+            0 0 200px rgba(143, 14, 210, 0.4);
+        }
+
+        .page-container {
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+    </style>
+
+    <div class="page-container">
+    <h1>تشخیص گونه گیاهان خانگی</h1><br><br>
+
+        <p style="color: lightgray">
+        شما رو به مدل تشخیص نوع گیاهان خانگی معرفی می کنم. از اولین مدل های یادگیری عمیق برای تشخیص نوع گیاهان خانگی فارسی. با وارد کردن یک تصویر از گیاه خانگی خودتون، میتونید گونه اون رو ببینید و اطلاعاتی مثل نام علمی، نام فارسی، شرایط نگهاری و ... رو در مورد اون گیاه مشاهده کنید.
+    </p>
+
+    <hr style="color: white">
+
+    <div class="container container-custom">
+    <br>
+        <div class="form-container" style="display: flex; justify-content: center; width: 100%; border-radius: 30px; background-color: #262a33">
+            <form method="post" enctype="multipart/form-data" class="p-3" style="width: 100%;">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.image.label_tag }}
+                    {{ form.image }}
+                </div>
+                <button type="submit" class="submit-btn">ارسال</button>
+            </form>
+        </div>
+    </div><br><br><br>
+    {% if plant %}
+        <div style="display: flex; justify-content: center">
+        <div style="padding: 20px; border: 1px white solid; border-radius: 30px; width: 292px; height: 392px">
+        <div class="plant-card" style="display: list-item; justify-content: center; border: 1px solid #606060; border-radius: 20px; width: 250px; height: 350px">
+            <img src="{{ plant.plant_image.url }}" style="border-top-right-radius: 20px; border-top-left-radius: 20px; width: 250px">
+            <p style="color: white; font-size: 30px; margin-right: 10px">{{ plant.name }}</p>
+            <p style="color: white; margin-right: 10px">{{ plant.scientific_name }}</p>
+            <p style="color: white; margin-right: 10px">{{ plant.persian_name }}</p>
+
+            <div style="display: flex; justify-content: center; margin: 10px; gap: 10px">
+
+            <a href="{% url 'my_plants:plant_detail' plant.id %}" style="background-color: #22b42e; color: white; border-radius: 10px; border: 1px #22b42e solid; height: 30px; width: 200px; display: flex; justify-content: center; align-items: center ">اطلاعات بیشتر</a>
+                            {% if not plant in user_plants %}
+                                <a href="{% url 'my_plants:user_plant_adder' plant.id %}" style="background: #2793d0; height: 30px; width: 40px;  border-radius: 10px; display: flex; justify-content: center; align-items: center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-plus" viewBox="0 0 16 16">
+                                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                                    </svg>
+                                </a>
+                            {% else %}
+                                <a style="background-color: #ef1313; width: 40px; height: 30px; border-radius: 10px; display: flex; justify-content: center; align-items: center" href="{% url 'my_plants:user_plant_remover' plant.id %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-x" viewBox="0 0 16 16">
+                                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                                    </svg>
+                                </a>
+                            {% endif %}
+            </div>
+        </div>
+
+        </div>
+    </div>
+    {% else %}
+        <p class="plant-info">ابتدا تصویری وارد کنید تا پاسخ رو ببینید</p>
+    {% endif %}
+    <hr class="hr-custom">
+    <div style="display: flex; justify-content: center">
+    <div class="container container-bg">
+        <p class="plant-info">گیاهان خانگی معمولا اسمای خیلی سختی دارن یا جاهای مختلف به نام های متفاوتی خطاب میشن. همین موضوعات باعث سردرگمی خیلیا میشه که دوست دارن در مورد گیاهان خانگی اطلاعات داشته باشن اما نمیدونن که از کجا اطلاعات درست و کامل رو بدست بیارن. خب! این مدل برای اینجور افراد طراحی شده. این مدل یک مدل یادگیری ماشینه که شما میتونید تصویری از گیاه خونگیتونو بهش بدید و مدل، نام ومشخصات و اطلاعات مفصل و کاملی در مورد اون گیاه رو بهتون بده. این پروژه در بسیاری از برنامه ها مورد استفاده قرار گرفته و خیلی تازگی نداره. اما لازم میدونستم برای یک وبسایتی که درمورد گیاهان خانگی هست این قابلیت رو قرار بدم. امیدوارم که از کارکردن با مدل من لذت ببرید :)</p><br>
+
+        <img src="{% static 'house_plant_detector_image.jpg' %}" class="center-image" >
+    </div></div><br><br>
+    </div><br>
+    <p style="color: gray">توجه داشته باشید که این مدل مانند تمامی مدل های دیگر یادگپیری عمیق، امکان خطا دارد.</p>
+{% endblock %}

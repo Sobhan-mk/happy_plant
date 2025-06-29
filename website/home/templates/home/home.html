@@ -1,0 +1,515 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    خانه
+{% endblock %}
+{% block body %}
+    <style>
+
+        .main-heading {
+            color: white;
+            font-size: 50px;
+        }
+
+
+        .section-heading {
+            color: rgb(255,255,255);
+            font-size: 50px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full height of the viewport */
+            background-color: #14191e; /* Background color matching .info-box */
+        }
+
+            .box {
+                position: relative;
+                border-radius: 53px; /* Rounded corners */
+                padding: 20px;
+                height: 100%;
+                width: 70%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: transparent;
+                border: 1px lightgray solid;
+            }
+        .info-box {
+            background-color: #14191e;
+            height: 100%;
+            width: 100%;
+            border-radius: 40px;
+            box-shadow: 0 0 70px rgba(103, 255, 114, 0.64), /* Green glow */
+                        0 0 100px rgba(106, 255, 116, 0.71), /* Larger green glow */
+                        0 0 200px rgba(55, 255, 67, 0.4); /* Even larger green glow */
+            padding: 25px;
+        }
+
+        .info-text {
+            font-size: 17px;
+            color: lightgray;
+        }
+
+        .model-info-container{
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .logo {
+            height: 250px;
+            margin-left: 15%;
+        }
+
+        .about-me-container,
+        .about-site-container {
+            display: flex;
+            position: relative;
+            width: 1000px;
+            height: 300px;
+            border-radius: 35px;
+            margin: auto;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .about-me-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 100%;
+        }
+
+        .about-table {
+            width: 80%;
+            margin: 0 10px; /* 10px margin on the right and left */
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 15px; /* Rounded corners */
+            border: 1px white solid;
+        }
+
+        .about-table th, .about-table td {
+            width: 16.6%; /* Adjusting width for each column if equal width is desired */
+            height: auto; /* Adjust height as needed */
+            padding: 10px; /* Add padding for better spacing */
+            border: 1px solid lightgray; /* Add border if needed */
+            text-align: center; /* Center align text */
+        }
+
+        .images {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            margin: 0 10%;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: center
+        }
+
+        .form-iner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            background-color: white;
+            border: 1px white solid;
+            border-radius: 15px;
+            width: 440px;
+            padding: 2px
+        }
+
+            @media (max-width: 768px) {
+
+                .box {
+                    position: relative;
+                    border-radius: 30px; /* Rounded corners */
+                    height: auto;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: transparent;
+                    border: 1px lightgray solid;
+                    padding: 15px;
+                }
+
+                .info-box {
+                    background-color: #14191e;
+                    height: auto; /* Ensuring height is auto for better responsiveness */
+                    width: 100%;
+                    border-radius: 20px;
+                    box-shadow: 0 0 50px rgba(103, 255, 114, 0.64), /* Green glow */
+                                0 0 50px rgba(106, 255, 116, 0.71), /* Larger green glow */
+                                0 0 50px rgba(55, 255, 67, 0.4); /* Even larger green glow */
+                    padding: 10px;
+                    display: flex;
+                    flex-direction: column; /* Ensuring content inside is centered */
+                }
+
+                .info-text {
+                    font-size: 16px; /* Adjust the font size for better readability */
+                    color: lightgray;
+                    text-align: center; /* Center the text */
+                }
+
+                .model-info-container{
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+                    padding: 10px;
+                    gap: 5px;
+
+                }
+
+                .logo {
+                    width: 300px;
+                    height: 140px;
+                    margin-left: 15%;
+                }
+
+                .about-me-container {
+                    display: flex;
+                    position: relative;
+                    border-radius: 35px;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                    width: 100%;
+                }
+
+                .about-table th, .about-table td {
+                    width: auto; /* Adjust the width automatically */
+                    height: auto; /* Adjust the height automatically */
+                    padding: 10px; /* Add padding for better spacing */
+                    border: 1px solid lightgray; /* Add border if needed */
+                    text-align: center; /* Center align text */
+                }
+
+
+                .about-site-container {
+                    width: 100%;
+                    padding: 10px;
+                }
+
+                .images {
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+                    margin: 10px;
+                    width: 100%;
+
+                }
+
+                .form-container {
+                    display: flex;
+                    justify-content: center;
+                    padding: 10px;
+                }
+
+                .form-iner-container {
+                    width: 350px;
+                }
+
+            }
+
+
+
+
+        .ai-button-1, .ai-button-2 {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden; /* Ensures that the image does not overflow the container */
+        }
+
+        .ai-button-1 img, .ai-button-2 img {
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.5s ease; /* Smooth transition */
+            opacity: 0; /* Start with the image hidden */
+            position: absolute; /* Position the image absolutely within the container */
+            top: 0;
+            left: 0;
+        }
+
+        .ai-button-1 .overlay, .ai-button-2 .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), #1a1a1a);
+            transition: opacity 0.5s ease; /* Smooth transition */
+            opacity: 0;
+        }
+
+        .ai-button-1:hover img, .ai-button-2:hover img {
+            opacity: 1; /* Fade in image on hover */
+        }
+
+        .ai-button-1:hover .overlay, .ai-button-2:hover .overlay {
+            opacity: 1; /* Fade in overlay on hover */
+        }
+
+        .ai-button-1 a, .ai-button-2 a {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 10px; /* Optional: Add padding to the text for better readability */
+            border-radius: 5px; /* Optional: Add border-radius to the text for better aesthetics */
+        }
+
+
+
+
+        . about-link {
+            background: #3d3d3d;
+            border-radius: 10px;
+            border: 1px solid gray;
+            height: 30px;
+            width: 300px;
+            color: white;
+            align-items: center;
+            display: flex;
+            justify-content: center
+        }
+
+        .about-link:hover {
+            background-color: #7c7c7c;
+        }
+
+
+
+
+        th, td {
+            border: 1px solid lightgray;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #3a3a3a;
+            color: lightgray;
+        }
+
+
+
+
+        .about-me-text,
+        .about-site-text {
+            font-size: 17px;
+            color: lightgray;
+        }
+
+        .plant-image {
+            width: 100px;
+            border: 1px solid white;
+            border-radius: 10px;
+            margin-right: 15px;
+        }
+
+        .button {
+            background-color: #16ad2f;
+            color: white;
+            border: 1px #16ad2f solid;
+            border-radius: 10px;
+            height: 30px;
+            width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .button:hover{
+            background-color: #6ec280;
+            color: black;
+        }
+
+        .page-container {
+            margin-left: 20px;
+            margin-right: 10px;
+        }
+
+
+    </style>
+    <div class="page-container">
+        <div style="display: flex; justify-content: center; align-items: center">
+        <div style="display:flex; justify-content:center; align-items: center; flex-direction: column">
+            <img src="{% static 'images/written_dark_logo.png' %}" class="logo"><br><br>
+            <h1 class="main-heading">برای گیاهت زندگی شاد بساز</h1>
+            <h1 style="color: #1fc050">گیاهان رو بهتر بشناس</h1>
+            <h1 style="color: #1fc050">روش های نگهاری از اونها رو یاد بگیر</h1><br>
+            <p style="color: white">یک سایت دانش آموزی با امکانات جذاب برای دوست داران جهان گیاهان</p>
+            {% if not user.is_authenticated %}
+                <p style="color: white">همین الان به سایت ما بپیوندید تا از امکانات متنوع از جمله هوش مصنوعی های قرار داده شده در این سایت استفاده کنید.</p><br>
+
+            <div class="form-container">
+            <form method="get" action="{% url 'accounts:register' %}">
+
+                    <div class="form-iner-container">
+                        <input style="color: black; background-color: white; height: 50px; width: 300px; border-radius: 10px; border: white 1px solid;" placeholder="ایمیل خود را وارد کنید">
+                    <button type="submit" style="color: white; background-color: #1cb932; border-radius: 10px; border: 1px solid #1cb932; width: 130px; height: 50px; font-size: 17px">ساخت حساب</button>
+                    </div>
+
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div><br><br><br><br>
+
+
+    <div class="container">
+        <div class="box">
+            <div class="info-box">
+                <p class="info-text">در این سایت امکانات جالبی در رابطه با نگهداری از گیاهان خانگی و مشکل یابی گیاهان زراعی برای شما قرار دادم. دو مدل یادگیری عمیق توی این سایت وجود داره که یکی از اونها برای تشخیص بیماری گیاهان آسیب دیده استفاده میشه و اون یکی برای شناسایی گونه گیاهان خانگی ساخته شده. البته مدل تشخیص دهنده مشکل گیاهان، دایره تشخیص کوچیکتری داره و تنها برای گیاهان زراعی مهم عمل می کنه. اما مدل تشخیص گیاهان خانگی توانایی تشخیص بیشتر گیاهان خانگی رو داره.امیدوارم از استفاده از این مدل ها لذت ببرید و براتون مفید باشه. </p>
+                <br><hr style="color: white">
+                <p class="info-text">این دو مدل با کتابخانه pytorch ترین شده اند و از دیتاست های ...</p>
+
+                <div class="model-info-container">
+                    <a class="about-link" href="{% url "PLDdetector:about_model" %}" style="background-color: #565656; border-radius: 10px; border: 1px solid gray; height: 30px; width: 270px; color: white; display: flex; justify-content: center; align-items: center">درباره مدل تشحیص بیماری</a><br>
+                    <a class="about-link" href="{% url 'house_plant_species_detector:about_model' %}" style="background-color: #565656; border-radius: 10px; border: 1px solid gray; height: 30px; width: 270px; color: white; display: flex; justify-content: center; align-items: center">درباره مدل تشحیص گیاه خانگی</a><br>
+                </div>
+
+
+                <br><hr style="color: white">
+                <p class="info-text">توجه داشته باشید که قبل از استفاده از این محتوا نیازمند ورود به سایت یا ساخت حساب کاربری هستید.</p>
+
+                <div style="display: flex; justify-content: center; gap: 40px">
+                    <div style="display: flex; justify-content: center">
+                        <div class="ai-button-1" style="border-bottom-right-radius: 15px; border-top-right-radius: 15px; border: 1px #505050 solid">1
+                            {% if user.is_authenticated %}
+                                <a href="{% url "PLDdetector:detector_model" %}" style="font-size: 20px; color: lightgray">تشخیص گیاهان آسیب دیده</a>
+                            {% else %}
+                                <a href="{% url "accounts:login" %}" style="font-size: 20px; color: lightgray">تشخیص گیاهان آسیب دیده</a>
+                            {% endif %}
+                            <img src="{% static 'images/diseased_plant.jpg' %}" alt="PLD Detector">
+                            <div class="overlay"></div>
+                        </div>
+                        <div class="ai-button-2" style="border-bottom-left-radius: 15px; border-top-left-radius: 15px; border: 1px #4a4c50 solid">
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'house_plant_species_detector:detector' %}" style="font-size: 20px; color: lightgray">تشخیص گونه گیاهان خانگی</a>
+                            {% else %}
+                                <a href="{% url 'accounts:login' %}" style="font-size: 20px; color: lightgray">تشخیص گونه گیاهان خانگی</a>
+                            {% endif %}
+                            <img src="{% static 'images/snake_plant.jpg' %}" alt="House Plant Detector">
+                            <div class="overlay"></div>
+                        </div>
+                    </div>
+                    </div>
+            </div><br>
+        </div>
+    </div>
+
+
+
+    <br><br><br>
+
+    <div style="display: flex; justify-content: center">
+        <p class="section-heading">درباره من</p>
+    </div><br><br><br>
+        <div class="about-me-container">
+            <img src="{% static 'images/developer_image.jpg' %}" class="about-me-image">
+            <p class="about-me-text" style="margin-right: 10px">سلام من سبحان مختاری هستم. دانش آموز پایه نهم مدرسه شاهد بنیانان فولادشهر اصفهان. حدود سه ساله که برنامه نویسی پایتون میکنم. مدت طولانی در رابطه با جنگو و طراحی سایت کسب مهارت می‌کردم و بعد از اون به طور سفت و سخت در حوزه هوش مصنوعی و یادگیری ماشین. در ابتدا مبانی اصلی هوش مصنوعی و یادگیری ماشین رو فرا گرفتم و در ادامه به طور جدی یادگیری عمیق و شبکه های عصبی رو تا سطح مورد نیازم یاد گرفتم. این وبسایت مخصوص بیست و یکیمین جشنواره نوجوانان خوارزمی ساخته شده و در طول سال تحصیلی 1403-1404 به اتمام رسیده است. </p>
+
+
+        </div><br><br><hr style="color: white;">
+
+        <div style="display: flex; justify-content: center">
+            <p style="color: white; font-size: 40px">لیست گیاهان خانگی</p>
+        </div>
+
+        <div class="about-site-container">
+            <p class="about-site-text">این سایت امکاناتی در رابطه با گیاهان خانگی و گیاهان آسیب دیده برای شما قرار میده. شما میتونید در لیست بلند گیاهان خانگی ما سرچ کنید یا اونها رو فیلتر کنید و گیاهتون رو ببینید. همچنین لیستی کوتاه تر از گیاهان آسیب دیده (مربوط به گیاهان زراعی مطرخ تر) وجود داره که اطلاعاتی درباره این مشکلات و دلیل ایجاد شدنشون و روش های درمان اونها در اختیارتون قرار میده. شما امکان این رو دارید که این گیاهان رو به لیست گیاهان خودتون اضافه و در صفحه پروفایلتون مشاهده کنید.</p>
+        </div>
+
+
+    <div class="images">
+        <div class="random-plants-container" style="display: list-item; ">
+            {% for plant in random_plants %}
+                        <div class="plant-card" style="width: 100%; ">
+                            <div class="flex-container" style="display: flex; align-items: center; gap: 20px">
+                                <img src="{{ plant.plant_image.url }}" class="plant-image">
+                                <div class="plant-info" style="color: lightgray">
+                                    <a href="{% url 'my_plants:plant_detail' plant.id %}" class="plant-link" style="color: lightgray; font-size: 17px">{{ plant.persian_name }} : {{ plant.scientific_name }}</a>
+                                </div>
+
+                            </div><hr style="color: white">
+        {% endfor %}
+        <a class="button" href="{% url 'my_plants:house_plants_names' %}" style="width: 100%; height: 40px">لیست کامل گیاهان</a><br>
+        </div>
+
+            <div style="display: flex; justify-content: center">
+            <p style="color: white; font-size: 40px">لیست بیماری گیاهان</p>
+        </div>
+
+        <div class="about-site-container">
+            <p class="about-site-text">آیا گیاهتون آسیب دیده. فهرستی از گیاهان آسیب دیده  واطلاعات جامع در رابطه با راه های درمان اونها برای شما قرار دادیم:</p>
+        </div>
+
+        </div>
+    </div>
+
+        <div class="images">
+        <div class="random-plants-container" style="display: list-item; ">
+            {% for plant in random_diseased_plant %}
+                        <div class="plant-card" style="width: 100%; ">
+                            <div class="flex-container" style="display: flex; align-items: center; gap: 20px">
+                                <img src="{{ plant.image.url }}" class="plant-image">
+                                <div class="plant-info" style="color: lightgray">
+                                    <a href="{% url 'PLDdetector:plant_diseased_detail' plant.id %}" class="plant-link" style="color: lightgray; font-size: 17px">{{ plant.persian_name }} : {{ plant.scientific_name }}</a>
+                                </div>
+
+                            </div><hr style="color: white">
+        {% endfor %}
+        <a class="button" href="{% url 'PLDdetector:plant_diseases_list' %}" style="width: 100%; height: 40px">لیست کامل بیماری گیاهان</a><br>
+        </div>
+
+
+
+        </div>
+    </div>
+
+    <br><br>
+    <div style="display: flex; justify-content: center">
+    <p style="font-size: 40px; color:white;">سوال بپرس؛ بقیه بهت جواب میدن</p><br>
+    </div>
+    <div class="form-container" >
+        <form class="qa-form" method="get" action="{% url 'qa:ask_questions' %}">
+                <div class="form-iner-container">
+                    <input style="color: black; background-color: white; height: 40px; width: 300px; border-radius: 10px; border: white 1px solid;" placeholder="ُسرتیتر سوال">
+                    {% if user.is_authenticated %}
+                        <button type="submit" style="color: white; background-color: #1cb932; border-radius: 10px; border: 1px solid #1cb932; width: 130px; height: 50px; font-size: 17px">ادامه</button>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" style="color: white; background-color: #1cb932; border-radius: 10px; border: 1px solid #1cb932; width: 130px; height: 50px; font-size: 17px; justify-content: center; align-items: center; display: flex">ادامه</a>
+                    {% endif %}
+                </div>
+            </form>
+    </div><hr style="color: white"><br><br>
+    <div style="display: flex; justify-content: center">
+        <p style="font-size: 40px;color: white">پیشنهادات و انتقادات</p><br>
+    </div>
+        <p style="color: lightgray">پیشنهادات و انتقاداتتو به گوشم برسون. حتما سعی میکنم توی نسخه های بعدی برطرفش کنم :)</p>
+    <div class="form-container">
+        <form class="qa-form" method="get" action="{% url 'approachs:send_approach' %}">
+                <div class="form-iner-container">
+                    <input style="color: black; background-color: white; height: 40px; width: 300px; border-radius: 10px; border: white 1px solid;" placeholder="ُسرتیتر ">
+                    {% if user.is_authenticated %}
+                        <button type="submit" style="color: white; background-color: #1cb932; border-radius: 10px; border: 1px solid #1cb932; width: 130px; height: 50px; font-size: 17px">ادامه</button>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" style="color: white; background-color: #1cb932; border-radius: 10px; border: 1px solid #1cb932; width: 130px; height: 50px; font-size: 17px; justify-content: center; align-items: center; display: flex">ادامه</a>
+                    {% endif%}
+                </div>
+            </form>
+    </div><hr style="color: white"><br><br>
+</div>
+{% endblock %}

@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import external_qa_page, ask_question, edit_question, show_answers, save_answer, cpecific_answer, delete, delete_all
 from django.conf.urls.static import static
+from djago.conf import settings
 
 #این اپ دارای صفحه های  :
 #پرسش سوال

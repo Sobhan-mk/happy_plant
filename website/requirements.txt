@@ -51,3 +51,4 @@ Werkzeug
 wrapt
 gdown
 gunicorn
+whitenoise

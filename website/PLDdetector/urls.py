@@ -1,6 +1,7 @@
 from django.contrib.auth.urls import path
 from . import views
 from django.conf import settings
+from django.conf.urls.static import static
 
 
 #برای نمیش توضیحات گیاهان، باید ابتدا id آن گیاه از طرف لینک ارجاع دهنده ارسال شود.

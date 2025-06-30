@@ -145,7 +145,7 @@ def change_password(request):
                         error = 'رمز عبور شما باید حداقل دارای 8 کاراکتر باشد'
                     elif not re.search(r'[A-Z]', new_password):
                         error = 'باید در رمز عبور شما حروف بزرگ انگلیسی وجود داشته باشد'
-                    elif not re.search(f'\d', new_password):
+                    elif not re.search(r'\d', new_password):
                         error = 'رمز عبور شما باید شامل اعداد باشد'
                     elif not re.search(r'[!@#$%^&*(),.?":{}|<>]', new_password):
                         error = 'رمز عبور شما یاید شامل علامت هایی مثل @،#،... باشد.'

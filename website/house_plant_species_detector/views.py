@@ -24,6 +24,14 @@ class_lookup_dictionary = {
 }
 
 
+
+model = CustomEnsembleModel()
+state_dict = torch.load(model_path, map_location=torch.device('cpu'), weights_only=True)
+model.load_state_dict(state_dict)
+
+model.eval()
+
+
 def house_plant_detector(request):
     image_url = None
     plant = None
